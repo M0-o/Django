@@ -15,11 +15,10 @@ Build a website that allows users to easily create a personalized portfolio.
 
 ## Implementation Plan
 1. Identify suitable single-page portfolio templates.
-2. Create a user model in the database.
-3. Implement authentication using JWT.
-4. Develop the base form.
-5. Write backend logic to process the form data and populate the portfolio template.
-6. Determine the delivery method for the generated files.
+2. Implement authentication/authorisation logic .
+3. Develop the base form.
+4. Write backend logic to process the form data and populate the portfolio template.
+5. Determine the delivery method for the generated files.
 
 
 
