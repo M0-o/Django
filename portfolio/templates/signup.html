@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+</head>
+<body>
+    <div class="signup-container">
+        <h1>Sign Up</h1>
+        {% if error_message %}
+        <!-- Display error message if exists -->
+        <div class="error">
+            <strong>{{ error_message }}</strong>
+        </div>
+        {% endif %}
+        <form method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <div>
+                <label for="id_firstname">First Name:</label>
+                <input type="text" name="firstname" id="id_firstname" required>
+            </div>
+            <div>
+                <label for="id_lastname">Last Name:</label>
+                <input type="text" name="lastname" id="id_lastname" required>
+            </div>
+            <div>
+                <label for="id_email">Email:</label>
+                <input type="email" name="email" id="id_email" required>
+            </div>
+            <div>
+                <label for="id_username">Username:</label>
+                <input type="text" name="username" id="id_username" required>
+            </div>
+            <div>
+                <label for="id_password">Password:</label>
+                <input type="password" name="password" id="id_password" required>
+            </div>
+            <div>
+                <input type="submit" value="Sign Up">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
