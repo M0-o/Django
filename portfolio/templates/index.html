@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Builder - Create Your Portfolio</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .hero { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; padding: 80px 0; text-align: center; }
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.25rem; margin-bottom: 2rem; opacity: 0.9; }
+        .btn { display: inline-block; padding: 12px 24px; background: white; color: #4f46e5; text-decoration: none; border-radius: 6px; font-weight: 500; transition: all 0.3s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .templates { padding: 80px 0; background: #f9fafb; }
+        .templates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .template-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .template-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .template-card img { width: 100%; height: 200px; object-fit: cover; }
+        .template-card-content { padding: 1.5rem; }
+        .template-card h3 { margin-bottom: 0.5rem; }
+        .steps { padding: 80px 0; }
+        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .step-card { text-align: center; padding: 2rem; }
+        .step-number { width: 40px; height: 40px; background: #4f46e5; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: bold; }
+        .auth-links { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; }
+        .auth-links a { color: white; text-decoration: underline; }
+        h2 { text-align: center; font-size: 2.5rem; margin-bottom: 1rem; }
+        .subtitle { text-align: center; color: #6b7280; max-width: 600px; margin: 0 auto 3rem; }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="container">
+            {% if user.is_authenticated %}
+            <h1>Welcome back, {{ user.first_name }}!</h1>
+            <p>Continue building your professional portfolio</p>
+            <a href="{% url 'logout' %}" class="btn">Logout</a>
+            {% else %}
+            <h1>Create Your Professional Portfolio</h1>
+            <p>Build a stunning portfolio website in minutes with our easy-to-use portfolio builder</p>
+            <div class="auth-links">
+                <a href="{% url 'login' %}" class="btn" style="background: transparent; border: 2px solid white; color: white;">Login</a>
+                <a href="{% url 'signup' %}" class="btn" style="background: transparent; border: 2px solid white; color: white;">Sign Up</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="templates">
+        <div class="container">
+            <h2>Choose Your Template</h2>
+            <p class="subtitle">Select from our professionally designed templates to showcase your work</p>
+            <div class="templates-grid">
+                <div class="template-card">
+                    <img src="https://via.placeholder.com/400x300" alt="Minimal Template">
+                    <div class="template-card-content">
+                        <h3>Minimal</h3>
+                        <p>Clean and modern design perfect for creatives</p>
+                    </div>
+                </div>
+                <div class="template-card">
+                    <img src="https://via.placeholder.com/400x300" alt="Professional Template">
+                    <div class="template-card-content">
+                        <h3>Professional</h3>
+                        <p>Sophisticated layout for business professionals</p>
+                    </div>
+                </div>
+                <div class="template-card">
+                    <img src="https://via.placeholder.com/400x300" alt="Creative Template">
+                    <div class="template-card-content">
+                        <h3>Creative</h3>
+                        <p>Bold and artistic design for creative portfolios</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="steps">
+        <div class="container">
+            <h2>How It Works</h2>
+            <p class="subtitle">Create your portfolio in four simple steps</p>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Sign Up</h3>
+                    <p>Create an account to get started</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Choose Template</h3>
+                    <p>Select from our professional templates</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Add Content</h3>
+                    <p>Fill in your information and upload projects</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Preview & Download</h3>
+                    <p>Review and get your portfolio website</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -4,10 +4,7 @@ from django.contrib.auth import authenticate , login as auth_login , logout as a
 from django.contrib.auth.models import User 
 
 def index(request):
-    if request.user.is_authenticated:
-        return HttpResponse(f"Hello,{request.user.username}.")
-    
-    return HttpResponse("Hello, world. You're at the portfolio index.") 
+    return render(request, "index.html") 
 
 def login(request):
     if request.method == "POST":
