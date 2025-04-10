@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="gradient-theme">
+    <!-- Hero Section with Gradient -->
+    <section class="py-5 gradient-hero text-white" style="background: linear-gradient(135deg, #6e45e2 0%, #89d4cf 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    {% if portfolio.profile_image %}
+                    <img src="{{ portfolio.profile_image.url }}" alt="{{ portfolio.title }}" class="img-fluid rounded-circle border border-3 border-white shadow-lg mb-3" style="max-width: 220px; max-height: 220px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-light text-center rounded-circle mx-auto d-flex justify-content-center align-items-center border border-3 border-white shadow-lg" style="width: 220px; height: 220px;">
+                        <i class="bi bi-person" style="font-size: 5rem; color: #6e45e2;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <h1 class="display-3 fw-bold" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">{{ portfolio.title }}</h1>
+                    <div class="lead mb-4 fs-4">{{ portfolio.about_me|linebreaks }}</div>
+                    <div class="d-flex flex-wrap gap-3">
+                        {% if portfolio.contact_email %}
+                        <a href="mailto:{{ portfolio.contact_email }}" class="btn btn-light btn-lg shadow-sm">
+                            <i class="bi bi-envelope me-2"></i>Contact Me
+                        </a>
+                        {% endif %}
+                        
+                        {% if portfolio.resume %}
+                        <a href="{{ portfolio.resume.url }}" class="btn btn-outline-light btn-lg shadow-sm" target="_blank">
+                            <i class="bi bi-file-earmark-text me-2"></i>View Resume
+                        </a>
+                        {% endif %}
+                        
+                        {% if portfolio.github_url or portfolio.linkedin_url %}
+                        <div class="ms-auto d-flex">
+                            {% if portfolio.github_url %}
+                            <a href="{{ portfolio.github_url }}" class="btn btn-light btn-lg me-2 shadow-sm" target="_blank">
+                                <i class="bi bi-github"></i>
+                            </a>
+                            {% endif %}
+                            
+                            {% if portfolio.linkedin_url %}
+                            <a href="{{ portfolio.linkedin_url }}" class="btn btn-light btn-lg shadow-sm" target="_blank">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section with Gradient Cards -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="display-4 mb-5 text-center fw-bold" style="background: linear-gradient(135deg, #6e45e2 0%, #89d4cf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">My Projects</h2>
+            
+            {% if projects %}
+            <div class="row g-4">
+                {% for project in projects %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-lg rounded-lg overflow-hidden">
+                        {% if project.image %}
+                        <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="bg-secondary text-center py-5">
+                            <i class="bi bi-image" style="font-size: 3rem; color: white;"></i>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">{{ project.title }}</h5>
+                            <p class="card-text">{{ project.description|truncatechars:150 }}</p>
+                            
+                            <div class="d-flex flex-wrap gap-1 mb-3">
+                                {% for tech in project.technologies_list %}
+                                <span class="badge" style="background: linear-gradient(135deg, #6e45e2 0%, #89d4cf 100%);">{{ tech }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            {% if project.completion_date %}
+                            <p class="text-muted"><small>Completed: {{ project.completion_date|date:"F Y" }}</small></p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card-footer bg-white border-top-0">
+                            <div class="d-flex justify-content-between">
+                                {% if project.project_url %}
+                                <a href="{{ project.project_url }}" class="btn btn-sm gradient-btn text-white" target="_blank" style="background: linear-gradient(135deg, #6e45e2 0%, #89d4cf 100%);">
+                                    <i class="bi bi-link-45deg me-1"></i>View Project
+                                </a>
+                                {% endif %}
+                                
+                                {% if project.github_url %}
+                                <a href="{{ project.github_url }}" class="btn btn-sm btn-dark" target="_blank">
+                                    <i class="bi bi-github me-1"></i>GitHub
+                                </a>
+                                {% endif %}
+                                
+                                {% if not project.project_url and not project.github_url %}
+                                <button class="btn btn-sm btn-outline-secondary" disabled>No links available</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info text-center shadow">
+                <p class="mb-0">No projects have been added to this portfolio yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Contact Section with Gradient -->
+    <section class="py-5" style="background: linear-gradient(135deg, rgba(110, 69, 226, 0.1) 0%, rgba(137, 212, 207, 0.1) 100%);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="display-4 mb-4 fw-bold" style="background: linear-gradient(135deg, #6e45e2 0%, #89d4cf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Get In Touch</h2>
+                    <p class="lead mb-5">Whether you'd like to discuss a project, ask a question, or just say hi, feel free to reach out!</p>
+                    
+                    <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+                        {% if portfolio.contact_email %}
+                        <a href="mailto:{{ portfolio.contact_email }}" class="btn btn-lg shadow-sm text-white" style="background: linear-gradient(135deg, #6e45e2 0%, #89d4cf 100%);">
+                            <i class="bi bi-envelope me-2"></i>{{ portfolio.contact_email }}
+                        </a>
+                        {% endif %}
+                        
+                        {% if portfolio.linkedin_url %}
+                        <a href="{{ portfolio.linkedin_url }}" class="btn btn-outline-primary btn-lg shadow-sm" target="_blank">
+                            <i class="bi bi-linkedin me-2"></i>LinkedIn
+                        </a>
+                        {% endif %}
+                        
+                        {% if portfolio.github_url %}
+                        <a href="{{ portfolio.github_url }}" class="btn btn-outline-dark btn-lg shadow-sm" target="_blank">
+                            <i class="bi bi-github me-2"></i>GitHub
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer with Gradient -->
+    <footer class="text-white py-4" style="background: linear-gradient(135deg, #6e45e2 0%, #89d4cf 100%);">
+        <div class="container text-center">
+            <p>{{ portfolio.title }} | Created with Django Portfolio Builder</p>
+            {% if user.is_authenticated and user == portfolio.user %}
+            <div class="mt-2">
+                <a href="{% url 'edit_portfolio' portfolio.id %}" class="btn btn-light btn-sm me-2">
+                    <i class="bi bi-pencil me-1"></i>Edit Portfolio
+                </a>
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </footer>
+</div>
+
+<style>
+    .gradient-theme .gradient-btn {
+        transition: transform 0.2s ease;
+    }
+    
+    .gradient-theme .gradient-btn:hover {
+        transform: translateY(-3px);
+    }
+    
+    .gradient-theme .card {
+        transition: transform 0.3s ease;
+    }
+    
+    .gradient-theme .card:hover {
+        transform: translateY(-10px);
+    }
+</style>
+{% endblock %} 

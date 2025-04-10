@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <section class="bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-3 fw-bold mb-3">Create Your Professional Portfolio</h1>
+                    <p class="lead mb-4">Showcase your work, skills, and achievements with a beautiful online portfolio. Easy to set up, completely customizable, and perfect for developers, designers, and creatives.</p>
+                    <div class="d-grid gap-2 d-md-flex">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg px-4">Go to Dashboard</a>
+                        {% else %}
+                        <a href="{% url 'signup' %}" class="btn btn-light btn-lg px-4">Get Started</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4">Log In</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <img src="https://via.placeholder.com/600x400/6c757d/ffffff?text=Portfolio+Builder" alt="Portfolio Builder" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Why Choose Our Portfolio Builder?</h2>
+                <p class="lead text-muted">Everything you need to showcase your professional work</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-layout-text-window-reverse text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="card-title">Beautiful Templates</h5>
+                            <p class="card-text">Choose from a variety of professionally designed templates that make your work stand out.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-pencil-square text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="card-title">Easy to Customize</h5>
+                            <p class="card-text">No coding required. Our intuitive interface makes it simple to create and edit your portfolio.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-devices text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="card-title">Responsive Design</h5>
+                            <p class="card-text">Your portfolio looks great on all devices - desktop, tablet, and mobile.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-images text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="card-title">Project Showcase</h5>
+                            <p class="card-text">Highlight your best work with beautiful project galleries and descriptions.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-share text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="card-title">Easy to Share</h5>
+                            <p class="card-text">Get a custom URL for your portfolio that you can share with potential employers or clients.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-shield-check text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="card-title">Secure & Reliable</h5>
+                            <p class="card-text">Your portfolio is hosted on secure servers with regular backups for peace of mind.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">How It Works</h2>
+                <p class="lead text-muted">Create your professional portfolio in three simple steps</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                                <h3 class="mb-0">1</h3>
+                            </div>
+                            <h5 class="card-title">Choose a Template</h5>
+                            <p class="card-text">Select from our collection of professionally designed templates that best showcase your work.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                                <h3 class="mb-0">2</h3>
+                            </div>
+                            <h5 class="card-title">Add Your Content</h5>
+                            <p class="card-text">Upload your projects, add descriptions, include your bio and contact information.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                                <h3 class="mb-0">3</h3>
+                            </div>
+                            <h5 class="card-title">Share Your Portfolio</h5>
+                            <p class="card-text">Get a custom URL to share with employers, clients, and your professional network.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg px-5">Go to Dashboard</a>
+                {% else %}
+                <a href="{% url 'signup' %}" class="btn btn-primary btn-lg px-5">Create Your Portfolio</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">What Our Users Say</h2>
+                <p class="lead text-muted">Join thousands of professionals who've built their portfolios with us</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="mb-3 text-warning">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <p class="card-text fst-italic mb-4">"This portfolio builder helped me land my dream job! The templates are beautiful and it was so easy to showcase my projects."</p>
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <span>SA</span>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Sarah A.</h6>
+                                    <small class="text-muted">UX Designer</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="mb-3 text-warning">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <p class="card-text fst-italic mb-4">"As a developer, I needed a quick way to showcase my projects. This platform made it incredibly simple and the result looks professional."</p>
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <span>JM</span>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">James M.</h6>
+                                    <small class="text-muted">Full Stack Developer</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="mb-3 text-warning">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <p class="card-text fst-italic mb-4">"I'm not tech-savvy, but I was able to create a stunning portfolio for my photography business in just an hour. Highly recommend!"</p>
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <span>RL</span>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Rebecca L.</h6>
+                                    <small class="text-muted">Photographer</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-9 text-center text-lg-start">
+                    <h2 class="display-5 fw-bold mb-3">Ready to showcase your work?</h2>
+                    <p class="lead mb-4 mb-lg-0">Create your professional portfolio today and stand out from the crowd.</p>
+                </div>
+                <div class="col-lg-3 text-center text-lg-end">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg px-4">Go to Dashboard</a>
+                    {% else %}
+                    <a href="{% url 'signup' %}" class="btn btn-light btn-lg px-4">Get Started Now</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 bg-dark text-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Portfolio Builder</h5>
+                    <p>Create a professional portfolio in minutes.</p>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <a href="#" class="text-white">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="text-white">
+                                <i class="bi bi-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="text-white">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="text-white">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5>Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'index' %}" class="text-white">Home</a></li>
+                        <li><a href="{% url 'features' %}" class="text-white">Features</a></li>
+                        <li><a href="{% url 'pricing' %}" class="text-white">Pricing</a></li>
+                        <li><a href="{% url 'about' %}" class="text-white">About</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'blog' %}" class="text-white">Blog</a></li>
+                        <li><a href="{% url 'tutorials' %}" class="text-white">Tutorials</a></li>
+                        <li><a href="{% url 'examples' %}" class="text-white">Examples</a></li>
+                        <li><a href="{% url 'faq' %}" class="text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5>Legal</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'privacy' %}" class="text-white">Privacy Policy</a></li>
+                        <li><a href="{% url 'terms' %}" class="text-white">Terms of Service</a></li>
+                        <li><a href="{% url 'cookies' %}" class="text-white">Cookie Policy</a></li>
+                        <li><a href="{% url 'contact' %}" class="text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; {% now "Y" %} Portfolio Builder. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %} 

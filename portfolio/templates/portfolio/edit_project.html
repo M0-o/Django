@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Edit Project</h1>
+        <div>
+            <a href="{% url 'edit_portfolio' project.portfolio.id %}" class="btn btn-secondary">Back to Portfolio</a>
+            <a href="{% url 'view_portfolio' project.portfolio.slug %}" class="btn btn-primary" target="_blank">View Portfolio</a>
+        </div>
+    </div>
+
+    {% if messages %}
+    <div class="row mb-4">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Project Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <h4 class="alert-heading">Please fix the following errors:</h4>
+                            <ul>
+                                {% for field, errors in form.errors.items %}
+                                    <li><strong>{{ field|title }}:</strong> {{ errors|join:", " }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <label for="id_title" class="form-label">Project Title *</label>
+                            <input type="text" name="title" id="id_title" class="form-control {% if form.title.errors %}is-invalid{% endif %}" value="{{ form.title.value }}" required>
+                            {% if form.title.errors %}
+                            <div class="invalid-feedback">{{ form.title.errors|join:", " }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label">Description *</label>
+                            <textarea name="description" id="id_description" rows="5" class="form-control {% if form.description.errors %}is-invalid{% endif %}" required>{{ form.description.value }}</textarea>
+                            {% if form.description.errors %}
+                            <div class="invalid-feedback">{{ form.description.errors|join:", " }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_image" class="form-label">Project Image</label>
+                            {% if project.image %}
+                            <div class="mb-2">
+                                <img src="{{ project.image.url }}" alt="Current project image" class="img-thumbnail" style="max-height: 200px;">
+                            </div>
+                            {% endif %}
+                            <input type="file" name="image" id="id_image" class="form-control {% if form.image.errors %}is-invalid{% endif %}" accept="image/*">
+                            {% if form.image.errors %}
+                            <div class="invalid-feedback">{{ form.image.errors|join:", " }}</div>
+                            {% endif %}
+                            <div class="form-text">Leave blank to keep the current image</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_project_url" class="form-label">Project URL</label>
+                                    <input type="url" name="project_url" id="id_project_url" class="form-control {% if form.project_url.errors %}is-invalid{% endif %}" value="{{ form.project_url.value|default:'' }}">
+                                    {% if form.project_url.errors %}
+                                    <div class="invalid-feedback">{{ form.project_url.errors|join:", " }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_github_url" class="form-label">GitHub URL</label>
+                                    <input type="url" name="github_url" id="id_github_url" class="form-control {% if form.github_url.errors %}is-invalid{% endif %}" value="{{ form.github_url.value|default:'' }}">
+                                    {% if form.github_url.errors %}
+                                    <div class="invalid-feedback">{{ form.github_url.errors|join:", " }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_technologies" class="form-label">Technologies Used *</label>
+                            <input type="text" name="technologies" id="id_technologies" class="form-control {% if form.technologies.errors %}is-invalid{% endif %}" value="{{ form.technologies.value }}" required>
+                            {% if form.technologies.errors %}
+                            <div class="invalid-feedback">{{ form.technologies.errors|join:", " }}</div>
+                            {% endif %}
+                            <div class="form-text">Enter technologies separated by commas (e.g., Python, Django, JavaScript)</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_completion_date" class="form-label">Completion Date</label>
+                                    <input type="date" name="completion_date" id="id_completion_date" class="form-control {% if form.completion_date.errors %}is-invalid{% endif %}" value="{{ form.completion_date.value|date:'Y-m-d' }}">
+                                    {% if form.completion_date.errors %}
+                                    <div class="invalid-feedback">{{ form.completion_date.errors|join:", " }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_order" class="form-label">Display Order *</label>
+                                    <input type="number" name="order" id="id_order" class="form-control {% if form.order.errors %}is-invalid{% endif %}" value="{{ form.order.value }}" min="1" required>
+                                    {% if form.order.errors %}
+                                    <div class="invalid-feedback">{{ form.order.errors|join:", " }}</div>
+                                    {% endif %}
+                                    <div class="form-text">Lower numbers appear first</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <form method="post" action="{% url 'delete_project' project.id %}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete Project</button>
+                            </form>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Project Preview</h5>
+                </div>
+                <div class="card-body">
+                    {% if project.image %}
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="img-fluid rounded mb-3">
+                    {% else %}
+                    <div class="bg-light text-center py-5 mb-3 rounded">
+                        <i class="bi bi-image" style="font-size: 3rem;"></i>
+                        <p class="mt-2">No image available</p>
+                    </div>
+                    {% endif %}
+                    
+                    <h5>{{ project.title }}</h5>
+                    <p>{{ project.description|truncatechars:150 }}</p>
+                    
+                    <div class="mt-3">
+                        <h6>Technologies:</h6>
+                        <div class="d-flex flex-wrap gap-1">
+                            {% for tech in project.technologies_list %}
+                            <span class="badge bg-secondary">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        {% if project.completion_date %}
+                        <p><strong>Completed:</strong> {{ project.completion_date|date:"F Y" }}</p>
+                        {% endif %}
+                        
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            {% if project.project_url %}
+                            <a href="{{ project.project_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-link-45deg"></i> View Project
+                            </a>
+                            {% endif %}
+                            
+                            {% if project.github_url %}
+                            <a href="{{ project.github_url }}" target="_blank" class="btn btn-sm btn-outline-dark">
+                                <i class="bi bi-github"></i> GitHub
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

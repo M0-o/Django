@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Add New Project</h1>
+        <div>
+            <a href="{% url 'edit_portfolio' portfolio_id %}" class="btn btn-secondary">Back to Portfolio</a>
+            {% if portfolio_slug %}
+            <a href="{% url 'view_portfolio' portfolio_slug %}" class="btn btn-primary" target="_blank">View Portfolio</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if messages %}
+    <div class="row mb-4">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Project Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <h4 class="alert-heading">Please fix the following errors:</h4>
+                            <ul>
+                                {% for field, errors in form.errors.items %}
+                                    <li><strong>{{ field|title }}:</strong> {{ errors|join:", " }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <label for="id_title" class="form-label">Project Title *</label>
+                            <input type="text" name="title" id="id_title" class="form-control {% if form.title.errors %}is-invalid{% endif %}" value="{{ form.title.value|default:'' }}" required>
+                            {% if form.title.errors %}
+                            <div class="invalid-feedback">{{ form.title.errors|join:", " }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label">Description *</label>
+                            <textarea name="description" id="id_description" rows="5" class="form-control {% if form.description.errors %}is-invalid{% endif %}" required>{{ form.description.value|default:'' }}</textarea>
+                            {% if form.description.errors %}
+                            <div class="invalid-feedback">{{ form.description.errors|join:", " }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_image" class="form-label">Project Image</label>
+                            <input type="file" name="image" id="id_image" class="form-control {% if form.image.errors %}is-invalid{% endif %}" accept="image/*">
+                            {% if form.image.errors %}
+                            <div class="invalid-feedback">{{ form.image.errors|join:", " }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_project_url" class="form-label">Project URL</label>
+                                    <input type="url" name="project_url" id="id_project_url" class="form-control {% if form.project_url.errors %}is-invalid{% endif %}" value="{{ form.project_url.value|default:'' }}">
+                                    {% if form.project_url.errors %}
+                                    <div class="invalid-feedback">{{ form.project_url.errors|join:", " }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_github_url" class="form-label">GitHub URL</label>
+                                    <input type="url" name="github_url" id="id_github_url" class="form-control {% if form.github_url.errors %}is-invalid{% endif %}" value="{{ form.github_url.value|default:'' }}">
+                                    {% if form.github_url.errors %}
+                                    <div class="invalid-feedback">{{ form.github_url.errors|join:", " }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_technologies" class="form-label">Technologies Used *</label>
+                            <input type="text" name="technologies" id="id_technologies" class="form-control {% if form.technologies.errors %}is-invalid{% endif %}" value="{{ form.technologies.value|default:'' }}" required>
+                            {% if form.technologies.errors %}
+                            <div class="invalid-feedback">{{ form.technologies.errors|join:", " }}</div>
+                            {% endif %}
+                            <div class="form-text">Enter technologies separated by commas (e.g., Python, Django, JavaScript)</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_completion_date" class="form-label">Completion Date</label>
+                                    <input type="date" name="completion_date" id="id_completion_date" class="form-control {% if form.completion_date.errors %}is-invalid{% endif %}" value="{{ form.completion_date.value|date:'Y-m-d'|default:'' }}">
+                                    {% if form.completion_date.errors %}
+                                    <div class="invalid-feedback">{{ form.completion_date.errors|join:", " }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_order" class="form-label">Display Order *</label>
+                                    <input type="number" name="order" id="id_order" class="form-control {% if form.order.errors %}is-invalid{% endif %}" value="{{ form.order.value|default:'1' }}" min="1" required>
+                                    {% if form.order.errors %}
+                                    <div class="invalid-feedback">{{ form.order.errors|join:", " }}</div>
+                                    {% endif %}
+                                    <div class="form-text">Lower numbers appear first</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Create Project</button>
+                            <a href="{% url 'edit_portfolio' portfolio_id %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Tips for Great Projects</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>
+                            <strong>Use high-quality images</strong> that clearly represent your project
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>
+                            <strong>Write detailed descriptions</strong> explaining the problem solved and your approach
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>
+                            <strong>List all technologies</strong> used in the project, including libraries and tools
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>
+                            <strong>Include links</strong> to both the live project and source code when available
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>
+                            <strong>Arrange projects</strong> with your best and most recent work first
+                        </li>
+                    </ul>
+                    
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Remember that this project will be displayed on your public portfolio. Make sure all information is professional and error-free.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
