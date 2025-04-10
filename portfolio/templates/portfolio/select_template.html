@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{% if portfolio %}Change Template{% else %}Choose a Template{% endif %}</h1>
+        <div>
+            {% if portfolio %}
+            <a href="{% url 'edit_portfolio' portfolio.id %}" class="btn btn-secondary">Back to Portfolio</a>
+            {% else %}
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if messages %}
+    <div class="row mb-4">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{% if portfolio %}Select a New Template{% else %}Start with a Template{% endif %}</h5>
+                    <p class="card-text">Choose a template that best showcases your work and professional style. {% if portfolio %}You can preview how your content will look in each template.{% else %}You'll be able to customize it and add your content after selection.{% endif %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for template in templates %}
+        <div class="col">
+            <div class="card h-100 {% if portfolio and portfolio.template == template %}border-primary{% endif %}">
+                <div class="card-header {% if portfolio and portfolio.template == template %}bg-primary text-white{% endif %}">
+                    <h5 class="mb-0">{{ template.name }}</h5>
+                </div>
+                
+                {% if template.thumbnail %}
+                <img src="{{ template.thumbnail.url }}" class="card-img-top p-3" alt="{{ template.name }} template">
+                {% else %}
+                <div class="bg-light text-center p-5">
+                    <i class="bi bi-layout-text-window" style="font-size: 4rem;"></i>
+                    <p>No preview available</p>
+                </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <p class="card-text">{{ template.description }}</p>
+                    
+                    <div class="mb-3">
+                        <h6>Features:</h6>
+                        <ul class="list-unstyled">
+                            {% for feature in template.feature_list %}
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>{{ feature }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-transparent">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'preview_template' template.id %}" class="btn btn-outline-primary" target="_blank">
+                            <i class="bi bi-eye"></i> Preview Template
+                        </a>
+                        
+                        {% if portfolio %}
+                        <a href="{% url 'change_template' portfolio.id template.id %}" class="btn {% if portfolio.template == template %}btn-outline-primary{% else %}btn-primary{% endif %}">
+                            {% if portfolio.template == template %}Current Template{% else %}Select Template{% endif %}
+                        </a>
+                        {% else %}
+                        <a href="{% url 'create_portfolio' %}?template={{ template.id }}" class="btn btn-primary">Select Template</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Preview {{ template.name }} Template{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Preview Header -->
+        <div class="col-12 bg-dark text-white p-3 sticky-top">
+            <div class="container d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Previewing: {{ template.name }} Template</h4>
+                <div>
+                    <a href="{% url 'create_portfolio' %}?template={{ template.id }}" class="btn btn-success me-2">
+                        <i class="bi bi-check-circle"></i> Use This Template
+                    </a>
+                    <a href="{% url 'templates' %}" class="btn btn-outline-light">
+                        <i class="bi bi-arrow-left"></i> Back to Templates
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template Preview Frame -->
+    <div class="row">
+        <div class="col-12 p-0">
+            <div class="ratio ratio-16x9" style="min-height: 800px;">
+                <div class="bg-light">
+                    <!-- Hero section with profile image and basic info -->
+                    <section class="bg-primary text-white py-5">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-md-4 text-center mb-4 mb-md-0">
+                                    <div class="bg-light text-center rounded-circle mx-auto d-flex justify-content-center align-items-center" style="width: 200px; height: 200px;">
+                                        <i class="bi bi-person" style="font-size: 5rem; color: #6c757d;"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <h1 class="display-4">{{ portfolio.title }}</h1>
+                                    <div class="lead mb-4">{{ portfolio.about_me }}</div>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <a href="mailto:{{ portfolio.contact_email }}" class="btn btn-light btn-lg">
+                                            <i class="bi bi-envelope me-2"></i>Contact Me
+                                        </a>
+                                        
+                                        <a href="#" class="btn btn-outline-light btn-lg" target="_blank">
+                                            <i class="bi bi-file-earmark-text me-2"></i>View Resume
+                                        </a>
+                                        
+                                        <div class="ms-auto d-flex">
+                                            <a href="{{ portfolio.github_url }}" class="btn btn-light btn-lg me-2" target="_blank">
+                                                <i class="bi bi-github"></i>
+                                            </a>
+                                            
+                                            <a href="{{ portfolio.linkedin_url }}" class="btn btn-light btn-lg" target="_blank">
+                                                <i class="bi bi-linkedin"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Projects section -->
+                    <section class="py-5 bg-light">
+                        <div class="container">
+                            <h2 class="display-5 mb-4 text-center">My Projects</h2>
+                            
+                            <div class="row g-4">
+                                {% for project in projects %}
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="card h-100 shadow">
+                                        <div class="bg-secondary text-center py-5">
+                                            <i class="bi bi-image" style="font-size: 3rem; color: white;"></i>
+                                        </div>
+                                        
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ project.title }}</h5>
+                                            <p class="card-text">{{ project.description }}</p>
+                                            
+                                            <div class="d-flex flex-wrap gap-1 mb-3">
+                                                {% for tech in project.technologies_list %}
+                                                <span class="badge bg-primary">{{ tech }}</span>
+                                                {% endfor %}
+                                            </div>
+                                            
+                                            {% if project.completion_date %}
+                                            <p class="text-muted"><small>Completed: {{ project.completion_date }}</small></p>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="card-footer bg-white border-top-0">
+                                            <div class="d-flex justify-content-between">
+                                                {% if project.project_url %}
+                                                <a href="{{ project.project_url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                                    <i class="bi bi-link-45deg me-1"></i>View Project
+                                                </a>
+                                                {% endif %}
+                                                
+                                                {% if project.github_url %}
+                                                <a href="{{ project.github_url }}" class="btn btn-sm btn-outline-dark" target="_blank">
+                                                    <i class="bi bi-github me-1"></i>GitHub
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Contact section -->
+                    <section class="py-5">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 text-center">
+                                    <h2 class="display-5 mb-4">Get In Touch</h2>
+                                    <p class="lead mb-5">Whether you'd like to discuss a project, ask a question, or just say hi, feel free to reach out!</p>
+                                    
+                                    <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+                                        <a href="mailto:{{ portfolio.contact_email }}" class="btn btn-primary btn-lg">
+                                            <i class="bi bi-envelope me-2"></i>{{ portfolio.contact_email }}
+                                        </a>
+                                        
+                                        <a href="{{ portfolio.linkedin_url }}" class="btn btn-outline-primary btn-lg" target="_blank">
+                                            <i class="bi bi-linkedin me-2"></i>LinkedIn
+                                        </a>
+                                        
+                                        <a href="{{ portfolio.github_url }}" class="btn btn-outline-dark btn-lg" target="_blank">
+                                            <i class="bi bi-github me-2"></i>GitHub
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fixed floating Action Bar -->
+<div class="position-fixed bottom-0 start-0 end-0 bg-dark text-white p-3" style="z-index: 1030;">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <span class="badge bg-light text-dark">Preview Mode</span>
+            <span class="ms-2">This is a preview of how your portfolio will look using the {{ template.name }} template.</span>
+        </div>
+        <div>
+            <a href="{% url 'create_portfolio' %}?template={{ template.id }}" class="btn btn-success me-2">
+                <i class="bi bi-check-circle"></i> Use This Template
+            </a>
+            <a href="{% url 'templates' %}" class="btn btn-outline-light">Cancel</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

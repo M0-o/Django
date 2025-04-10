@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Create Your Portfolio</h1>
+        <div>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    {% if messages %}
+    <div class="row mb-4">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Portfolio Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="template" value="{{ selected_template.id }}">
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <h4 class="alert-heading">Please fix the following errors:</h4>
+                            <ul>
+                                {% for field, errors in form.errors.items %}
+                                    <li><strong>{{ field|title }}:</strong> {{ errors|join:", " }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <label for="id_title" class="form-label">Portfolio Title *</label>
+                            <input type="text" name="title" id="id_title" class="form-control {% if form.title.errors %}is-invalid{% endif %}" value="{{ form.title.value|default:'' }}" required>
+                            {% if form.title.errors %}
+                            <div class="invalid-feedback">{{ form.title.errors|join:", " }}</div>
+                            {% endif %}
+                            <div class="form-text">This will be displayed as the headline of your portfolio</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_about_me" class="form-label">About Me *</label>
+                            <textarea name="about_me" id="id_about_me" rows="5" class="form-control {% if form.about_me.errors %}is-invalid{% endif %}" required>{{ form.about_me.value|default:'' }}</textarea>
+                            {% if form.about_me.errors %}
+                            <div class="invalid-feedback">{{ form.about_me.errors|join:", " }}</div>
+                            {% endif %}
+                            <div class="form-text">Write a brief introduction about yourself and your skills</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_contact_email" class="form-label">Contact Email *</label>
+                            <input type="email" name="contact_email" id="id_contact_email" class="form-control {% if form.contact_email.errors %}is-invalid{% endif %}" value="{{ form.contact_email.value|default:user.email }}" required>
+                            {% if form.contact_email.errors %}
+                            <div class="invalid-feedback">{{ form.contact_email.errors|join:", " }}</div>
+                            {% endif %}
+                            <div class="form-text">This email will be displayed on your portfolio for contact purposes</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_linkedin_url" class="form-label">LinkedIn URL</label>
+                                    <input type="url" name="linkedin_url" id="id_linkedin_url" class="form-control {% if form.linkedin_url.errors %}is-invalid{% endif %}" value="{{ form.linkedin_url.value|default:'' }}">
+                                    {% if form.linkedin_url.errors %}
+                                    <div class="invalid-feedback">{{ form.linkedin_url.errors|join:", " }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_github_url" class="form-label">GitHub URL</label>
+                                    <input type="url" name="github_url" id="id_github_url" class="form-control {% if form.github_url.errors %}is-invalid{% endif %}" value="{{ form.github_url.value|default:'' }}">
+                                    {% if form.github_url.errors %}
+                                    <div class="invalid-feedback">{{ form.github_url.errors|join:", " }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_profile_image" class="form-label">Profile Image *</label>
+                            <input type="file" name="profile_image" id="id_profile_image" class="form-control {% if form.profile_image.errors %}is-invalid{% endif %}" accept="image/*" required>
+                            {% if form.profile_image.errors %}
+                            <div class="invalid-feedback">{{ form.profile_image.errors|join:", " }}</div>
+                            {% endif %}
+                            <div class="form-text">Upload a professional headshot or profile picture (recommended size: 400x400px)</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_resume" class="form-label">Resume/CV (PDF)</label>
+                            <input type="file" name="resume" id="id_resume" class="form-control {% if form.resume.errors %}is-invalid{% endif %}" accept="application/pdf">
+                            {% if form.resume.errors %}
+                            <div class="invalid-feedback">{{ form.resume.errors|join:", " }}</div>
+                            {% endif %}
+                            <div class="form-text">Upload your resume in PDF format (optional but recommended)</div>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="published" id="id_published" {% if form.published.value %}checked{% endif %}>
+                            <label class="form-check-label" for="id_published">
+                                Make portfolio public
+                            </label>
+                            <div class="form-text">If checked, your portfolio will be visible to anyone with the link</div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Create Portfolio</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Selected Template</h5>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ selected_template.name }}</h5>
+                    
+                    {% if selected_template.thumbnail %}
+                    <img src="{{ selected_template.thumbnail.url }}" class="img-fluid rounded mb-3" alt="{{ selected_template.name }} template">
+                    {% endif %}
+                    
+                    <p class="card-text">{{ selected_template.description }}</p>
+                    
+                    <div class="mb-3">
+                        <h6>Features:</h6>
+                        <ul class="list-unstyled">
+                            {% for feature in selected_template.feature_list %}
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>{{ feature }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <a href="{% url 'templates' %}" class="btn btn-outline-primary">Change Template</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Tips for Great Portfolios</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item px-0">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>
+                            <strong>Use a clear, professional title</strong> that reflects your career focus
+                        </li>
+                        <li class="list-group-item px-0">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>
+                            <strong>Write a compelling "About Me"</strong> highlighting your skills and experience
+                        </li>
+                        <li class="list-group-item px-0">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>
+                            <strong>Add your best projects</strong> after creating your portfolio
+                        </li>
+                        <li class="list-group-item px-0">
+                            <i class="bi bi-lightbulb text-warning me-2"></i>
+                            <strong>Include links</strong> to your professional social profiles
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

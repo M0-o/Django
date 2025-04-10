@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="minimalist-theme">
+    <!-- Hero Section - Minimalist -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    {% if portfolio.profile_image %}
+                    <img src="{{ portfolio.profile_image.url }}" alt="{{ portfolio.title }}" class="img-fluid rounded-circle mb-3" style="max-width: 200px; max-height: 200px; object-fit: cover; border: 1px solid #eee;">
+                    {% else %}
+                    <div class="bg-light text-center rounded-circle mx-auto d-flex justify-content-center align-items-center" style="width: 200px; height: 200px; border: 1px solid #eee;">
+                        <i class="bi bi-person" style="font-size: 4rem; color: #333;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <h1 class="display-4 fw-light" style="letter-spacing: -1px;">{{ portfolio.title }}</h1>
+                    <div class="lead mb-4 text-muted" style="font-weight: 300;">{{ portfolio.about_me|linebreaks }}</div>
+                    <div class="d-flex flex-wrap gap-3">
+                        {% if portfolio.contact_email %}
+                        <a href="mailto:{{ portfolio.contact_email }}" class="btn btn-outline-dark btn-sm">
+                            <i class="bi bi-envelope me-2"></i>Contact Me
+                        </a>
+                        {% endif %}
+                        
+                        {% if portfolio.resume %}
+                        <a href="{{ portfolio.resume.url }}" class="btn btn-outline-dark btn-sm" target="_blank">
+                            <i class="bi bi-file-earmark-text me-2"></i>View Resume
+                        </a>
+                        {% endif %}
+                        
+                        {% if portfolio.github_url or portfolio.linkedin_url %}
+                        <div class="ms-auto d-flex">
+                            {% if portfolio.github_url %}
+                            <a href="{{ portfolio.github_url }}" class="btn btn-link text-dark me-2" target="_blank">
+                                <i class="bi bi-github fs-5"></i>
+                            </a>
+                            {% endif %}
+                            
+                            {% if portfolio.linkedin_url %}
+                            <a href="{{ portfolio.linkedin_url }}" class="btn btn-link text-dark" target="_blank">
+                                <i class="bi bi-linkedin fs-5"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="container">
+        <hr class="my-0" style="border-top: 1px solid #eee;">
+    </div>
+
+    <!-- Projects Section - Minimalist -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <h2 class="mb-5 text-center fw-light" style="letter-spacing: -1px;">My Projects</h2>
+            
+            {% if projects %}
+            <div class="row g-5">
+                {% for project in projects %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0">
+                        {% if project.image %}
+                        <img src="{{ project.image.url }}" class="card-img-top rounded" alt="{{ project.title }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="bg-light text-center py-5 rounded">
+                            <i class="bi bi-image" style="font-size: 3rem; color: #aaa;"></i>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="card-body px-0 pt-3">
+                            <h5 class="card-title fw-normal">{{ project.title }}</h5>
+                            <p class="card-text text-muted small">{{ project.description|truncatechars:150 }}</p>
+                            
+                            <div class="d-flex flex-wrap gap-1 mb-3">
+                                {% for tech in project.technologies_list %}
+                                <span class="badge bg-light text-dark border">{{ tech }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            {% if project.completion_date %}
+                            <p class="text-muted small">Completed: {{ project.completion_date|date:"F Y" }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card-footer bg-white px-0 border-0">
+                            <div class="d-flex">
+                                {% if project.project_url %}
+                                <a href="{{ project.project_url }}" class="btn btn-sm btn-outline-dark me-2" target="_blank">
+                                    <i class="bi bi-link-45deg me-1"></i>View
+                                </a>
+                                {% endif %}
+                                
+                                {% if project.github_url %}
+                                <a href="{{ project.github_url }}" class="btn btn-sm btn-outline-dark" target="_blank">
+                                    <i class="bi bi-github me-1"></i>GitHub
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center text-muted my-5">
+                <p>No projects have been added to this portfolio yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="container">
+        <hr class="my-0" style="border-top: 1px solid #eee;">
+    </div>
+
+    <!-- Contact Section - Minimalist -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <h2 class="mb-4 fw-light" style="letter-spacing: -1px;">Get In Touch</h2>
+                    <p class="text-muted mb-5" style="font-weight: 300;">Whether you'd like to discuss a project, ask a question, or just say hi.</p>
+                    
+                    <div class="d-flex justify-content-center gap-3">
+                        {% if portfolio.contact_email %}
+                        <a href="mailto:{{ portfolio.contact_email }}" class="btn btn-dark">
+                            <i class="bi bi-envelope me-2"></i>{{ portfolio.contact_email }}
+                        </a>
+                        {% endif %}
+                        
+                        {% if portfolio.linkedin_url %}
+                        <a href="{{ portfolio.linkedin_url }}" class="btn btn-outline-dark" target="_blank">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% if portfolio.github_url %}
+                        <a href="{{ portfolio.github_url }}" class="btn btn-outline-dark" target="_blank">
+                            <i class="bi bi-github"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer - Minimalist -->
+    <footer class="py-4 bg-white">
+        <div class="container text-center">
+            <p class="text-muted small mb-0">{{ portfolio.title }} | Created with Django Portfolio Builder</p>
+            {% if user.is_authenticated and user == portfolio.user %}
+            <div class="mt-2">
+                <a href="{% url 'edit_portfolio' portfolio.id %}" class="btn btn-outline-dark btn-sm me-2">
+                    <i class="bi bi-pencil me-1"></i>Edit Portfolio
+                </a>
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-dark btn-sm">
+                    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </footer>
+</div>
+{% endblock %} 

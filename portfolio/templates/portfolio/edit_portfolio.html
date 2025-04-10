@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Edit Portfolio</h4>
+                    <div>
+                        <a href="{% url 'view_portfolio' portfolio.slug %}" class="btn btn-light btn-sm me-2" target="_blank">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Template Selection -->
+                        <div class="mb-4">
+                            <label for="{{ form.template.id_for_label }}" class="form-label">Template</label>
+                            {{ form.template.errors }}
+                            <div class="input-group">
+                                {{ form.template }}
+                                <a href="{% url 'templates' %}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-grid"></i> Browse Templates
+                                </a>
+                            </div>
+                            {% if form.template.help_text %}
+                            <div class="form-text text-muted">{{ form.template.help_text }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Other Fields -->
+                        {% for field in form %}
+                            {% if field.name != 'template' %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field.errors }}
+                                {% if field.field.widget.input_type == 'file' %}
+                                    <div class="mb-2">
+                                        {% if field.value %}
+                                        <p class="text-muted">Current file: {{ field.value }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                {{ field }}
+                                {% if field.help_text %}
+                                <div class="form-text text-muted">{{ field.help_text }}</div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Back to Dashboard</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <!-- Projects Section -->
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Projects</h5>
+                    <a href="{% url 'add_project' portfolio.id %}" class="btn btn-light btn-sm">
+                        <i class="bi bi-plus"></i> Add Project
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for project in projects %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">{{ project.title }}</h6>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'edit_project' project.id %}" class="btn btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="{% url 'delete_project' project.id %}" class="btn btn-outline-danger" 
+                                       onclick="return confirm('Are you sure you want to delete this project?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <p class="text-muted small mb-0">{{ project.description|truncatechars:100 }}</p>
+                        </div>
+                        {% empty %}
+                        <div class="list-group-item text-center text-muted">
+                            <p class="mb-0">No projects added yet</p>
+                            <small>Click the "Add Project" button to get started</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        margin-bottom: 0.5rem;
+    }
+    .errorlist {
+        color: #dc3545;
+        list-style: none;
+        padding: 0;
+        margin: 0 0 0.5rem 0;
+    }
+    textarea {
+        min-height: 120px;
+    }
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %} 
