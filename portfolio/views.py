@@ -1,12 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.template.loader import render_to_string
-from django.conf import settings
 from django.contrib import messages
-import os
 from .models import Portfolio, Template, Project
 from .forms import PortfolioForm, ProjectForm, UserProfileForm
 
@@ -54,7 +50,8 @@ def dashboard(request):
 
 @login_required
 def template_selection(request):
-    templates = Template.objects.filter(is_active=True)[3:]
+    templates = Template.objects.filter(is_active=True)
+    print(templates)
     return render(request, 'portfolio/template_selection.html', {'templates': templates})
 
 @login_required
@@ -137,7 +134,7 @@ def preview_template(request, template_id):
         'Dark Mode': 'portfolio/templates/dark_mode.html',
         'Gradient': 'portfolio/templates/gradient.html',
         'Minimalist': 'portfolio/templates/minimalist.html',
-        # Add other templates here as they are created
+        
     }
     
     # Default to the generic preview template if the specific template is not found
@@ -311,38 +308,5 @@ def edit_profile(request):
     else:
         form = UserProfileForm(instance=request.user)
     
-    return render(request, 'portfolio/edit_profile.html', {'form': form})
+    return render(request, 'edit_profile.html', {'form': form})
 
-# Additional page views
-def features(request):
-    return render(request, 'portfolio/features.html')
-
-def pricing(request):
-    return render(request, 'portfolio/pricing.html')
-
-def about(request):
-    return render(request, 'portfolio/about.html')
-
-def blog(request):
-    return render(request, 'portfolio/blog.html')
-
-def tutorials(request):
-    return render(request, 'portfolio/tutorials.html')
-
-def examples(request):
-    return render(request, 'portfolio/examples.html')
-
-def faq(request):
-    return render(request, 'portfolio/faq.html')
-
-def privacy(request):
-    return render(request, 'portfolio/privacy.html')
-
-def terms(request):
-    return render(request, 'portfolio/terms.html')
-
-def cookies(request):
-    return render(request, 'portfolio/cookies.html')
-
-def contact(request):
-    return render(request, 'portfolio/contact.html')
