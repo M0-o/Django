@@ -15,6 +15,9 @@
         {% endif %}
         <form method="post" action="{% url 'signup' %}">
             {% csrf_token %}
+            {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
             <div>
                 <label for="id_firstname">First Name:</label>
                 <input type="text" name="firstname" id="id_firstname" required>
@@ -37,6 +40,9 @@
             </div>
             <div>
                 <input type="submit" value="Sign Up">
+            </div>
+            <div class="links">
+                <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
             </div>
         </form>
     </div>
@@ -124,6 +130,20 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     background-color: #2980b9;
+}
+
+.links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.links a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.links a:hover {
+    text-decoration: underline;
 }
 </style>
 </html>

@@ -119,7 +119,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    # Application static files only
+    BASE_DIR / 'portfolio' / 'static',
 ]
 
 # Media files
@@ -130,3 +131,22 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Authentication settings
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'index'
+
+# Security settings for redirects
+ALLOWED_HOSTS_FOR_REDIRECTS = []  # Only allow redirects to internal URLs
+
+# Additional security settings
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+CSRF_COOKIE_SECURE = True if not DEBUG else False
+SESSION_COOKIE_SECURE = True if not DEBUG else False
+
+# URL sanitization settings
+PREVENT_OPEN_REDIRECT = True
+URL_ENCODE_REDIRECTS = False

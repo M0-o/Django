@@ -3,44 +3,119 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.template.loader import render_to_string
+from django.template.loader import render_to_string, get_template
 from django.conf import settings
 from django.contrib import messages
 import os
 from .models import Portfolio, Template, Project
 from .forms import PortfolioForm, ProjectForm, UserProfileForm
+from django.template import TemplateDoesNotExist
 
 def index(request):
     return render(request, "portfolio/home.html") 
 
 def login(request):
+    # If user is already logged in, redirect to dashboard
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+    
+    # Get next parameter if it exists and is safe
+    next_url = request.GET.get('next', '')
+    if next_url and (next_url.startswith('//') or ':' in next_url or '%' in next_url):
+        next_url = ''
+        
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(username=username, password=password)
         if not user:
-            return render(request, "login.html", {"error_message": "Invalid credentials"})
+            return render(request, "portfolio/login.html", {"error_message": "Invalid credentials", "next": next_url})
+        
         auth_login(request, user)
+        
+        # Get next URL from form submission
+        next_url = request.POST.get('next', '')
+        
+        # Validate the next URL for security
+        if next_url and not (next_url.startswith('//') or ':' in next_url or '%' in next_url):
+            # Only redirect to internal paths
+            if next_url.startswith('/'):
+                return redirect(next_url)
+            else:
+                try:
+                    # Try to resolve the URL by name
+                    return redirect(next_url)
+                except:
+                    # If URL resolution fails, go to dashboard
+                    return redirect("dashboard")
+        
+        # Default redirect to dashboard
         return redirect("dashboard")
     else:
-        return render(request, "login.html")
+        return render(request, "portfolio/login.html", {"next": next_url})
 
 def signup(request):
+    # If user is already logged in, redirect to dashboard
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+    
+    # Get next parameter if it exists and is safe
+    next_url = request.GET.get('next', '')
+    if next_url and (next_url.startswith('//') or ':' in next_url or '%' in next_url):
+        next_url = ''
+        
     if request.method == "POST":
         firstname = request.POST.get("firstname")
         lastname  = request.POST.get("lastname")
         username  = request.POST.get("username")
         email     = request.POST.get("email")
         password  = request.POST.get("password")
-        if User.objects.filter(username=username).exists():
-            return render(request, "signup.html", {"error_message": "Username already exists"})
         
-        user = User.objects.create_user(username=username, password=password, email=email,
-                                        first_name=firstname, last_name=lastname)
+        # Basic validation
+        if not all([firstname, lastname, username, email, password]):
+            return render(request, "portfolio/signup.html", {
+                "error_message": "All fields are required", 
+                "next": next_url
+            })
+            
+        if User.objects.filter(username=username).exists():
+            return render(request, "portfolio/signup.html", {
+                "error_message": "Username already exists",
+                "next": next_url
+            })
+        
+        # Create the user
+        user = User.objects.create_user(
+            username=username, 
+            password=password, 
+            email=email,
+            first_name=firstname, 
+            last_name=lastname
+        )
+        
+        # Log the user in
         auth_login(request, user)
+        
+        # Get next URL from form submission
+        next_url = request.POST.get('next', '')
+        
+        # Validate the next URL for security
+        if next_url and not (next_url.startswith('//') or ':' in next_url or '%' in next_url):
+            # Only redirect to internal paths
+            if next_url.startswith('/'):
+                return redirect(next_url)
+            else:
+                try:
+                    # Try to resolve the URL by name
+                    return redirect(next_url)
+                except:
+                    # If URL resolution fails, go to dashboard
+                    return redirect("dashboard")
+        
+        # Default redirect to dashboard
         return redirect("dashboard")
     else:
-        return render(request, "signup.html")
+        return render(request, "portfolio/signup.html", {"next": next_url})
     
 def logout(request):
     auth_logout(request)
@@ -54,7 +129,7 @@ def dashboard(request):
 
 @login_required
 def template_selection(request):
-    templates = Template.objects.filter(is_active=True)[3:]
+    templates = Template.objects.filter(is_active=True)
     return render(request, 'portfolio/template_selection.html', {'templates': templates})
 
 @login_required
@@ -137,11 +212,22 @@ def preview_template(request, template_id):
         'Dark Mode': 'portfolio/templates/dark_mode.html',
         'Gradient': 'portfolio/templates/gradient.html',
         'Minimalist': 'portfolio/templates/minimalist.html',
-        # Add other templates here as they are created
+        'Modern': 'portfolio/templates/modern/modern.html',  # Fixed path to include subdirectory
     }
     
     # Default to the generic preview template if the specific template is not found
-    template_file = template_map.get(template.name, 'portfolio/template_preview.html')
+    if template.name in template_map:
+        template_file = template_map[template.name]
+    else:
+        template_file = 'portfolio/template_preview.html'
+    
+    # Check if the template exists before rendering
+    try:
+        get_template(template_file)
+    except TemplateDoesNotExist:
+        # Fall back to default template if the selected one doesn't exist
+        template_file = 'portfolio/template_preview.html'
+        messages.warning(request, "The selected template could not be found. Using default template instead.")
     
     return render(request, template_file, {
         'template': template,
@@ -210,10 +296,22 @@ def view_portfolio(request, portfolio_slug):
         'Dark Mode': 'portfolio/templates/dark_mode.html',
         'Gradient': 'portfolio/templates/gradient.html',
         'Minimalist': 'portfolio/templates/minimalist.html',
+        'Modern': 'portfolio/templates/modern/modern.html',  # Fixed path to include subdirectory
     }
     
     # Use the selected template or fall back to default
-    template_name = template_map.get(portfolio.template.name, 'portfolio/view_portfolio.html')
+    if portfolio.template and portfolio.template.name in template_map:
+        template_name = template_map[portfolio.template.name]
+    else:
+        template_name = 'portfolio/view_portfolio.html'
+    
+    # Check if the template exists before rendering
+    try:
+        get_template(template_name)
+    except TemplateDoesNotExist:
+        # Fall back to default template if the selected one doesn't exist
+        template_name = 'portfolio/view_portfolio.html'
+        messages.warning(request, "The selected template could not be found. Using default template instead.")
     
     return render(request, template_name, {
         'portfolio': portfolio,
@@ -313,7 +411,11 @@ def edit_profile(request):
     
     return render(request, 'portfolio/edit_profile.html', {'form': form})
 
-# Additional page views
+# Remove unused views for pages that don't have templates
+# If you need these pages in the future, uncomment and create
+# the corresponding templates
+
+"""
 def features(request):
     return render(request, 'portfolio/features.html')
 
@@ -346,3 +448,4 @@ def cookies(request):
 
 def contact(request):
     return render(request, 'portfolio/contact.html')
+"""

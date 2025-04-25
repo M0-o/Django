@@ -5,8 +5,8 @@ from .models import Portfolio, Project, Template
 class PortfolioForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Only show templates after index 3 (excluding the first three templates)
-        self.fields['template'].queryset = Template.objects.filter(is_active=True)[3:]
+        # Show all active templates
+        self.fields['template'].queryset = Template.objects.filter(is_active=True)
         self.fields['template'].widget.attrs['class'] = 'form-select'
 
     class Meta:

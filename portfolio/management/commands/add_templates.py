@@ -8,6 +8,12 @@ class Command(BaseCommand):
     help = 'Add new portfolio templates to the database'
 
     def handle(self, *args, **options):
+        # Ensure thumbnail directory exists
+        thumbnail_dir = os.path.join(settings.MEDIA_ROOT, 'templates', 'thumbnails')
+        if not os.path.exists(thumbnail_dir):
+            os.makedirs(thumbnail_dir)
+            self.stdout.write(self.style.SUCCESS(f"Created template thumbnail directory at {thumbnail_dir}"))
+        
         templates_data = [
             {
                 'name': 'Dark Mode',
@@ -25,6 +31,12 @@ class Command(BaseCommand):
                 'name': 'Minimalist',
                 'description': 'Clean, minimal design with focus on content\nElegant typography and generous whitespace\nSubtle animations and interactions\nIdeal for photographers and writers',
                 'thumbnail_filename': 'minimalist_thumbnail.svg',
+                'is_active': True
+            },
+            {
+                'name': 'Modern',
+                'description': 'Contemporary professional design\nBold typography and clean layout\nResponsive grid-based structure\nPerfect for all professionals',
+                'thumbnail_filename': 'modern_thumbnail.svg',
                 'is_active': True
             }
         ]
