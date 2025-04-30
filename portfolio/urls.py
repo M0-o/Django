@@ -24,17 +24,4 @@ urlpatterns = [
     # User profile
     path("profile/edit/", views.edit_profile, name="edit_profile"),
     
-    # Additional pages - commented out as the views are not implemented yet
-    # Uncomment these when you implement the corresponding views and templates
-    # path("features/", views.features, name="features"),
-    # path("pricing/", views.pricing, name="pricing"),
-    # path("about/", views.about, name="about"),
-    # path("blog/", views.blog, name="blog"),
-    # path("tutorials/", views.tutorials, name="tutorials"),
-    # path("examples/", views.examples, name="examples"),
-    # path("faq/", views.faq, name="faq"),
-    # path("privacy/", views.privacy, name="privacy"),
-    # path("terms/", views.terms, name="terms"),
-    # path("cookies/", views.cookies, name="cookies"),
-    # path("contact/", views.contact, name="contact"),
 ]
